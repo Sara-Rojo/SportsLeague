@@ -1,21 +1,22 @@
 ﻿using SportsLeague.Domain.Entities;
 
-namespace SportsLeague.Domain.Interfaces.Services
+
+namespace SportsLeague.Domain.Interfaces.Services;
+
+
+public interface ITeamService
+
 {
-    internal interface ITeamService
-    {
-        public interface ITeamService
 
-        {
-            Task<IEnumerable<Team>> GetAllAsync();
+    Task<IEnumerable<Team>> GetAllAsync();
 
-            Task<Team?> GetByIdAsync(int id);
+    Task<Team?> GetByIdAsync(int id);
 
-            Task<Team> CreateAsync(Team team);
+    Task<Team> CreateAsync(Team team);
 
-            Task UpdateAsync(int id, Team team);
+    Task UpdateAsync(int id, Team team);
 
-            Task DeleteAsync(int id);
-        }
-    }
+    Task DeleteAsync(int id);
+
 }
+
