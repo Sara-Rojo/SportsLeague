@@ -9,7 +9,6 @@ using SportsLeague.API.DTOs.Response;
 using SportsLeague.Domain.Entities;
 
 using SportsLeague.Domain.Interfaces.Services;
-using SportsLeague.Domain.Services;
 
 
 namespace SportsLeague.API.Controllers;
@@ -23,7 +22,7 @@ public class TeamController : ControllerBase
 
 {
 
-    private readonly TeamService _teamService;
+    private readonly ITeamService _teamService;
 
     private readonly IMapper _mapper;
 
@@ -32,7 +31,7 @@ public class TeamController : ControllerBase
 
     public TeamController(
 
-    TeamService teamService,
+    ITeamService teamService,
 
     IMapper mapper,
 
@@ -187,4 +186,3 @@ public class TeamController : ControllerBase
     }
 
 }
-
