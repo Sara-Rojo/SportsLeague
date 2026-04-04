@@ -24,9 +24,8 @@ public class SponsorService : ISponsorService
         _logger = logger;
     }
 
-    // ─────────────────────
+
     // CRUD
-    // ─────────────────────
 
     public async Task<IEnumerable<Sponsor>> GetAllAsync()
     {
@@ -42,14 +41,14 @@ public class SponsorService : ISponsorService
 
     public async Task<Sponsor> CreateAsync(Sponsor sponsor)
     {
-        // 🔥 VALIDACIÓN: nombre duplicado
+        
         if (await _sponsorRepository.ExistsByNameAsync(sponsor.Name))
         {
             _logger.LogWarning("Sponsor with name {Name} already exists", sponsor.Name);
             throw new InvalidOperationException("Ya existe un sponsor con ese nombre");
         }
 
-        // 🔥 VALIDACIÓN: email
+
         if (!sponsor.ContactEmail.Contains("@"))
         {
             throw new InvalidOperationException("Email inválido");
@@ -90,27 +89,23 @@ public class SponsorService : ISponsorService
         await _sponsorRepository.DeleteAsync(id);
     }
 
-    // ─────────────────────
+
     // RELACIÓN N:M
-    // ─────────────────────
 
     public async Task RegisterToTournament(int sponsorId, int tournamentId, decimal contractAmount)
     {
-        // 🔥 VALIDACIÓN: monto
+ 
         if (contractAmount <= 0)
             throw new InvalidOperationException("El monto debe ser mayor a 0");
 
-        // 🔥 VALIDACIÓN: sponsor existe
         var sponsor = await _sponsorRepository.GetByIdAsync(sponsorId);
         if (sponsor == null)
             throw new KeyNotFoundException("Sponsor no encontrado");
 
-        // 🔥 VALIDACIÓN: torneo existe
         var tournament = await _tournamentRepository.GetByIdAsync(tournamentId);
         if (tournament == null)
             throw new KeyNotFoundException("Tournament no encontrado");
 
-        // 🔥 VALIDACIÓN: duplicado
         var exists = await _tsRepository.GetRelation(tournamentId, sponsorId);
         if (exists != null)
             throw new InvalidOperationException("El sponsor ya está vinculado a este torneo");

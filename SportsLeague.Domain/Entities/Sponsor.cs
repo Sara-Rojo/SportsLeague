@@ -10,7 +10,7 @@ namespace SportsLeague.Domain.Entities
         public string? WebsiteUrl { get; set; }
         public SponsorCategory Category { get; set; }
 
-        //RELACIÓN N:M
+        //RELACIÓN 
         public ICollection<TournamentSponsor> TournamentSponsors { get; set; } = new List<TournamentSponsor>();
     }
 }
