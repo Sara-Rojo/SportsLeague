@@ -5,6 +5,7 @@ using SportsLeague.Domain.Helper;
 using SportsLeague.Domain.Interfaces.Repositories;
 using SportsLeague.Domain.Interfaces.Services;
 using SportsLeague.Domain.Services;
+using SportsLeague.DataAccess.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +21,6 @@ builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
 builder.Services.AddScoped<IRefereeRepository, RefereeRepository>(); // NUEVO
 builder.Services.AddScoped<ITournamentRepository, TournamentRepository>(); // NUEVO
 builder.Services.AddScoped<ITournamentTeamRepository, TournamentTeamRepository>(); // NUEVO
-builder.Services.AddScoped<IRefereeService, RefereeService>(); // NUEVO
 builder.Services.AddScoped<ITournamentSponsorRepository, TournamentSponsorRepository>();
 builder.Services.AddScoped<ISponsorRepository, SponsorRepository>();
 builder.Services.AddScoped<IMatchRepository, MatchRepository>();
@@ -37,6 +37,7 @@ builder.Services.AddScoped<ISponsorService, SponsorService>(); // NUEVO
 builder.Services.AddScoped<IMatchService, MatchService>();
 builder.Services.AddScoped<IMatchEventService, MatchEventService>();
 builder.Services.AddScoped<MatchValidationHelper>();
+builder.Services.AddScoped<IStandingsService, StandingsService>();
 
 // ── AutoMapper ──
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
@@ -48,6 +49,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var app = builder.Build();
+
+// ── Data Seeder ──
+using (var scope = app.Services.CreateScope()) //Scoped, Singleton y Transient
+{
+    var context = scope.ServiceProvider.GetRequiredService<LeagueDbContext>();
+
+    await context.Database.MigrateAsync(); // Crea la BD + aplica migraciones
+    await DataSeeder.SeedAsync(context);
+}
 
 // ── Middleware Pipeline ──
 if (app.Environment.IsDevelopment())
