@@ -28,16 +28,33 @@ public class MatchLineupController : ControllerBase
         int matchId,
         MatchLineupRequestDTO dto)
     {
-        var lineup = _mapper.Map<MatchLineup>(dto);
+        try
+        {
+            var lineup = _mapper.Map<MatchLineup>(dto);
 
-        var created = await _lineupService.AddPlayerAsync(
-            matchId,
-            lineup);
+            var created = await _lineupService.AddPlayerAsync(
+                matchId,
+                lineup);
 
-        var response = _mapper.Map<MatchLineupResponseDTO>(
-            created);
+            var response = _mapper.Map<MatchLineupResponseDTO>(
+                created);
 
-        return Ok(response);
+            return Ok(response);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new
+            {
+                message = ex.Message
+            });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Conflict(new
+            {
+                message = ex.Message
+            });
+        }
     }
 
     // GET ALL
