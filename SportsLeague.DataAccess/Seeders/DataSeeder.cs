@@ -292,7 +292,7 @@ public static class DataSeeder
         }
 
         await context.SaveChangesAsync();
-
+        /*
         // ═══ 7. RESULTADOS, GOLES Y TARJETAS ═══
         var random = new Random(42); // Seed fijo = resultados reproducibles
         var allMatches = await context.Matches.ToListAsync();
@@ -380,6 +380,6 @@ public static class DataSeeder
             }
         }
 
-        await context.SaveChangesAsync();
+        await context.SaveChangesAsync();*/
     }
 }
